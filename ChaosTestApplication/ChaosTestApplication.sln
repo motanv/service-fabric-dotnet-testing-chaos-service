@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.22823.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "ChaosTestApplication", "ChaosTestApplication\ChaosTestApplication.sfproj", "{93D81507-BCCC-43D6-8667-2D42473F0C32}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChaosTest.ChaosService", "ChaosTest.ChaosService\ChaosTest.ChaosService.csproj", "{63C35489-68FE-4F40-89A9-8370B2E2E64C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChaosTest.Common", "ChaosTest.Common\ChaosTest.Common.csproj", "{1FD7ECFA-C9B6-486A-A911-F71F3C91AF89}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChaosTest.WebService", "ChaosTest.WebService\ChaosTest.WebService.csproj", "{621C4C64-7822-4EA1-9B8B-90301F00EA4D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9E66CCED-A718-43FC-A2B2-F9470DBA7D76}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{93D81507-BCCC-43D6-8667-2D42473F0C32}.Debug|x64.ActiveCfg = Debug|x64
+		{93D81507-BCCC-43D6-8667-2D42473F0C32}.Debug|x64.Build.0 = Debug|x64
+		{93D81507-BCCC-43D6-8667-2D42473F0C32}.Debug|x64.Deploy.0 = Debug|x64
+		{93D81507-BCCC-43D6-8667-2D42473F0C32}.Release|x64.ActiveCfg = Release|x64
+		{93D81507-BCCC-43D6-8667-2D42473F0C32}.Release|x64.Build.0 = Release|x64
+		{93D81507-BCCC-43D6-8667-2D42473F0C32}.Release|x64.Deploy.0 = Release|x64
+		{63C35489-68FE-4F40-89A9-8370B2E2E64C}.Debug|x64.ActiveCfg = Debug|x64
+		{63C35489-68FE-4F40-89A9-8370B2E2E64C}.Debug|x64.Build.0 = Debug|x64
+		{63C35489-68FE-4F40-89A9-8370B2E2E64C}.Release|x64.ActiveCfg = Release|x64
+		{63C35489-68FE-4F40-89A9-8370B2E2E64C}.Release|x64.Build.0 = Release|x64
+		{1FD7ECFA-C9B6-486A-A911-F71F3C91AF89}.Debug|x64.ActiveCfg = Debug|x64
+		{1FD7ECFA-C9B6-486A-A911-F71F3C91AF89}.Debug|x64.Build.0 = Debug|x64
+		{1FD7ECFA-C9B6-486A-A911-F71F3C91AF89}.Release|x64.ActiveCfg = Release|x64
+		{1FD7ECFA-C9B6-486A-A911-F71F3C91AF89}.Release|x64.Build.0 = Release|x64
+		{621C4C64-7822-4EA1-9B8B-90301F00EA4D}.Debug|x64.ActiveCfg = Debug|x64
+		{621C4C64-7822-4EA1-9B8B-90301F00EA4D}.Debug|x64.Build.0 = Debug|x64
+		{621C4C64-7822-4EA1-9B8B-90301F00EA4D}.Release|x64.ActiveCfg = Release|x64
+		{621C4C64-7822-4EA1-9B8B-90301F00EA4D}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

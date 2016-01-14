@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Settings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.microsoft.com/2011/01/fabric">
+  <Section Name="ChaosTestService">
+    <Parameter Name="MaxClusterStabilizationTimeout" Value="" MustOverride="true"/>
+    <Parameter Name="MaxConcurrentFaults" Value="" MustOverride="true"/>
+    <Parameter Name="EnableMoveReplicaFaults" Value="" MustOverride="true"/>
+    <Parameter Name="OperationTimeout" Value="" MustOverride="true"/>
+    <Parameter Name="WaitTimeBetweenFaults" Value="" MustOverride="true"/>
+    <Parameter Name="WaitTimeBetweenIterations" Value="" MustOverride="true"/>
+  </Section>
+  <Section Name="ReplicatorConfig">
+    <Parameter Name="ReplicatorEndpoint" Value="ChaosServiceReplicatorEndpoint" />
+  </Section>
+  <Section Name="ReplicatorSecurityConfig">
+    <Parameter Name="CredentialType" Value="None" />
+  </Section>
+</Settings>

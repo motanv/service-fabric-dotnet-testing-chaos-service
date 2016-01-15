@@ -1,3 +1,9 @@
+---
+services: service-fabric
+platforms: dotnet
+author: vturecek
+---
+
 # Chaos Test Service
 Learn how to write a service that uses Microsoft Azure Service Fabric's built-in Chaos Test to exercise your code's fault tolerance by putting a little chaos in your cluster.
 

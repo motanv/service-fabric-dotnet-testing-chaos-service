@@ -161,7 +161,6 @@ namespace ChaosTest.ChaosService
 
             IReliableDictionary<string, CurrentState> chaosServiceState =
                 await this.StateManager.GetOrAddAsync<IReliableDictionary<string, CurrentState>>(StringResource.ChaosServiceStateKey);
-            ;
 
             using (ITransaction tx = this.StateManager.CreateTransaction())
             {

@@ -1,7 +1,7 @@
 ---
 services: service-fabric
 platforms: dotnet
-author: vturecek
+author: motanv
 ---
 
 # Chaos Test Service

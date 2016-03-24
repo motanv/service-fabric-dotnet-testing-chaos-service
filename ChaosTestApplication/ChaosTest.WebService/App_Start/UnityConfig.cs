@@ -18,12 +18,8 @@ namespace ChaosTest.WebService
         public static void RegisterComponents(HttpConfiguration config)
         {
             UnityContainer container = new UnityContainer();
-
-
-            HttpCommunicationClientFactory clientFactory = new HttpCommunicationClientFactory(
-                ServicePartitionResolver.GetDefault(),
-                TimeSpan.FromSeconds(10),
-                TimeSpan.FromSeconds(3));
+            
+            HttpCommunicationClientFactory clientFactory = new HttpCommunicationClientFactory();
 
             container.RegisterType<DefaultController>(new InjectionConstructor(clientFactory));
 

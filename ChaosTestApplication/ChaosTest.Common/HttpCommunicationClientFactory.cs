@@ -5,170 +5,54 @@
 
 namespace ChaosTest.Common
 {
-    using System;
-    using System.Net;
-    using System.Net.Sockets;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.ServiceFabric.Services.Client;
     using Microsoft.ServiceFabric.Services.Communication.Client;
 
-    /// <summary>
-    /// Factory that creates clients that know to communicate with the WordCount service.
-    /// Contains a service partition resolver that resolves a partition key
-    /// and sets BaseAddress to the address of the replica that should serve a request.
-    /// </summary>
     public class HttpCommunicationClientFactory : CommunicationClientFactoryBase<HttpCommunicationClient>
     {
-        private static TimeSpan MaxRetryBackoffIntervalOnNonTransientErrors = TimeSpan.FromSeconds(2);
+        private HttpClient httpClient = new HttpClient();
 
-        public HttpCommunicationClientFactory(ServicePartitionResolver resolver, TimeSpan operationTimeout, TimeSpan readWriteTimeout)
-            : base(resolver, null, null)
+        public HttpCommunicationClientFactory(IServicePartitionResolver resolver = null, IEnumerable<IExceptionHandler> exceptionHandlers = null)
+            : base(resolver, CreateExceptionHandlers(exceptionHandlers))
         {
-            this.OperationTimeout = operationTimeout;
-            this.ReadWriteTimeout = readWriteTimeout;
-            this.TransientBackOff = TimeSpan.FromSeconds(20);
-            this.NonTransientBackoff = TimeSpan.FromSeconds(5);
         }
-
-        /// <summary>
-        /// Represents the value for operation timeout. Passed to clients.
-        /// </summary>
-        public TimeSpan OperationTimeout { get; set; }
-
-        /// <summary>
-        /// Represents the value for the timeout used to read/write from a stream. Passed to clients.
-        /// </summary>
-        public TimeSpan ReadWriteTimeout { get; set; }
-
-        public TimeSpan TransientBackOff { get; set; }
-
-        public TimeSpan NonTransientBackoff { get; set; }
 
         protected override void AbortClient(HttpCommunicationClient client)
         {
-            // Http communication doesn't maintain a communication channel, so nothing to abort.
+            // client with persistent connections should be abort their connections here.
+            // HTTP clients don't hold persistent connections, so no action is taken.
         }
 
-        //protected override bool ValidateClient(ResolvedServiceEndpoint endpoint, CommunicationClient client)
-        //{
-        //    if (client.BaseAddress.ToString() == endpoint.Address)
-        //    {
-        //        return true;
-        //    }
-        //    else
-        //    {
-        //        return false;
-        //    }
-        //}
-
-        protected override bool ValidateClient(HttpCommunicationClient clientChannel)
+        protected override Task<HttpCommunicationClient> CreateClientAsync(string endpoint, CancellationToken cancellationToken)
         {
-            // Http communication doesn't maintain a communication channel, so nothing to validate.
+            // clients that maintain persistent connections to a service should 
+            // create that connection here.
+            // an HTTP client doesn't maintain a persistent connection.
+            return Task.FromResult(new HttpCommunicationClient(this.httpClient, endpoint));
+        }
+
+        protected override bool ValidateClient(HttpCommunicationClient client)
+        {
+            // client with persistent connections should be validated here.
+            // HTTP clients don't hold persistent connections, so no validation needs to be done.
             return true;
         }
 
         protected override bool ValidateClient(string endpoint, HttpCommunicationClient client)
         {
-            if (string.IsNullOrEmpty(endpoint) || !endpoint.StartsWith("http"))
-            {
-                return false;
-            }
-
+            // client with persistent connections should be validated here.
+            // HTTP clients don't hold persistent connections, so no validation needs to be done.
             return true;
         }
 
-        protected override Task<HttpCommunicationClient> CreateClientAsync(string endpoint, CancellationToken cancellationToken)
+        private static IEnumerable<IExceptionHandler> CreateExceptionHandlers(IEnumerable<IExceptionHandler> additionalHandlers)
         {
-            if (string.IsNullOrEmpty(endpoint) || !endpoint.StartsWith("http"))
-            {
-                throw new InvalidOperationException("Endpoint was null, empty, or didn't start with http");
-            }
-
-            if (!endpoint.EndsWith("/"))
-            {
-                endpoint = string.Format("{0}/", endpoint);
-            }
-
-            // Create a communication client. This doesn't establish a session with the server.
-            return Task.FromResult(new HttpCommunicationClient(new Uri(endpoint), this.OperationTimeout, this.ReadWriteTimeout));
-        }
-
-        protected override bool OnHandleException(Exception e, out ExceptionHandlingResult result)
-        {
-            if (e is TimeoutException)
-            {
-                return this.CreateExceptionHandlingResult(false, out result, this.NonTransientBackoff);
-            }
-            else if (e is ProtocolViolationException)
-            {
-                return this.CreateExceptionHandlingResult(false, out result, this.NonTransientBackoff);
-            }
-            else if (e is SocketException)
-            {
-                return this.CreateExceptionHandlingResult(false, out result, this.NonTransientBackoff);
-            }
-
-            WebException we = e as WebException;
-
-            if (we == null)
-            {
-                we = e.InnerException as WebException;
-            }
-
-            if (we != null)
-            {
-                HttpWebResponse errorResponse = we.Response as HttpWebResponse;
-
-                if (we.Status == WebExceptionStatus.ProtocolError)
-                {
-                    if (errorResponse.StatusCode == HttpStatusCode.NotFound)
-                    {
-                        // This could either mean we requested an endpoint that does not exist in the service API (a user error)
-                        // or the address that was resolved by fabric client is stale (transient runtime error) in which we should re-resolve.
-                        return this.CreateExceptionHandlingResult(false, out result);
-                    }
-
-                    if (errorResponse.StatusCode == HttpStatusCode.InternalServerError)
-                    {
-                        // The address is correct, but the server processing failed.
-                        // This could be due to conflicts when writing the word to the dictionary.
-                        // Retry the operation without re-resolving the address.
-                        return this.CreateExceptionHandlingResult(true, out result, this.TransientBackOff);
-                    }
-                }
-
-                if (we.Status == WebExceptionStatus.SendFailure)
-                {
-                    return this.CreateExceptionHandlingResult(true, out result, this.TransientBackOff);
-                }
-                else if (we.Status == WebExceptionStatus.Timeout ||
-                         we.Status == WebExceptionStatus.RequestCanceled ||
-                         we.Status == WebExceptionStatus.ConnectionClosed ||
-                         we.Status == WebExceptionStatus.ConnectFailure ||
-                         we.Status == WebExceptionStatus.UnknownError)
-                {
-                    return this.CreateExceptionHandlingResult(false, out result, this.NonTransientBackoff);
-                }
-            }
-
-            return base.OnHandleException(e, out result);
-        }
-
-        private bool CreateExceptionHandlingResult(bool isTransient, out ExceptionHandlingResult result)
-        {
-            return this.CreateExceptionHandlingResult(isTransient, out result, MaxRetryBackoffIntervalOnNonTransientErrors);
-        }
-
-        private bool CreateExceptionHandlingResult(bool isTransient, out ExceptionHandlingResult result, TimeSpan backOff)
-        {
-            result = new ExceptionHandlingRetryResult()
-            {
-                IsTransient = isTransient,
-                RetryDelay = backOff,
-            };
-
-            return true;
+            return new[] {new HttpExceptionHandler()}.Union(additionalHandlers ?? Enumerable.Empty<IExceptionHandler>());
         }
     }
 }

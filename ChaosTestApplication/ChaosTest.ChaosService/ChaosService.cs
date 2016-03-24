@@ -30,7 +30,8 @@ namespace ChaosTest.ChaosService
     {
         private CancellationTokenSource stopEventTokenSource;
 
-        public ChaosService()
+        public ChaosService(StatefulServiceContext context)
+            : base (context)
         {
         }
 
@@ -45,7 +46,7 @@ namespace ChaosTest.ChaosService
 
             using (ITransaction tx = this.StateManager.CreateTransaction())
             {
-                ConditionalResult<CurrentState> currentStateResult =
+                ConditionalValue<CurrentState> currentStateResult =
                     await chaosServiceState.TryGetValueAsync(tx, StringResource.ChaosServiceStateKey, LockMode.Update);
 
                 if (currentStateResult.HasValue &&
@@ -73,7 +74,7 @@ namespace ChaosTest.ChaosService
 
             using (ITransaction tx = this.StateManager.CreateTransaction())
             {
-                ConditionalResult<CurrentState> currentStateResult =
+                ConditionalValue<CurrentState> currentStateResult =
                     await chaosServiceState.TryGetValueAsync(tx, StringResource.ChaosServiceStateKey, LockMode.Update);
 
                 if (currentStateResult.HasValue &&
@@ -117,19 +118,21 @@ namespace ChaosTest.ChaosService
 
             using (ITransaction tx = this.StateManager.CreateTransaction())
             {
-                foreach (KeyValuePair<long, ChaosEntry> kvp in savedEvents)
-                {
-                    results.ChaosLog.Add(kvp.Key, kvp.Value);
-                }
+                IAsyncEnumerable<KeyValuePair<long, ChaosEntry>> enumerable = await savedEvents.CreateEnumerableAsync(tx);
 
-                ConditionalResult<DateTime> result = await startTime.TryGetValueAsync(tx, StringResource.StartTimeKey);
+                await enumerable.ForeachAsync(CancellationToken.None, item =>
+                {
+                    results.ChaosLog.Add(item.Key, item.Value);
+                });
+
+                ConditionalValue<DateTime> result = await startTime.TryGetValueAsync(tx, StringResource.StartTimeKey);
 
                 if (result.HasValue)
                 {
                     results.TotalRuntime = (DateTime.UtcNow - result.Value).ToString();
                 }
 
-                ConditionalResult<CurrentState> currentStateResult = await currentState.TryGetValueAsync(tx, StringResource.ChaosServiceStateKey);
+                ConditionalValue<CurrentState> currentStateResult = await currentState.TryGetValueAsync(tx, StringResource.ChaosServiceStateKey);
 
                 if (currentStateResult.HasValue)
                 {
@@ -147,8 +150,8 @@ namespace ChaosTest.ChaosService
             return new[]
             {
                 new ServiceReplicaListener(
-                    parameters =>
-                        new OwinCommunicationListener("", new Startup(this), parameters, ServiceEventSource.Current))
+                    context =>
+                        new OwinCommunicationListener("", new Startup(this), context, ServiceEventSource.Current))
             };
         }
 
@@ -182,7 +185,7 @@ namespace ChaosTest.ChaosService
                     //   fails over to another node, the state is preserved and the chaos test will continue to execute.
                     using (ITransaction tx = this.StateManager.CreateTransaction())
                     {
-                        ConditionalResult<CurrentState> currentStateResult =
+                        ConditionalValue<CurrentState> currentStateResult =
                             await chaosServiceState.TryGetValueAsync(tx, StringResource.ChaosServiceStateKey);
 
                         if (currentStateResult.HasValue &&
@@ -344,7 +347,7 @@ namespace ChaosTest.ChaosService
                     await eventCount.AddAsync(tx, StringResource.EventCountKey, 0);
                 }
 
-                ConditionalResult<long> result =
+                ConditionalValue<long> result =
                     await eventCount.TryGetValueAsync(tx, StringResource.EventCountKey, LockMode.Update);
 
                 if (result.HasValue)

@@ -6,6 +6,7 @@
 namespace ChaosTest.WebService
 {
     using System.Collections.Generic;
+    using System.Fabric;
     using ChaosTest.Common;
     using Microsoft.ServiceFabric.Services.Communication.Runtime;
     using Microsoft.ServiceFabric.Services.Runtime;
@@ -15,6 +16,10 @@ namespace ChaosTest.WebService
     /// </summary>
     public class WebService : StatelessService
     {
+        public WebService(StatelessServiceContext context)
+            : base (context)
+        { }
+
         protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
         {
             return new[]

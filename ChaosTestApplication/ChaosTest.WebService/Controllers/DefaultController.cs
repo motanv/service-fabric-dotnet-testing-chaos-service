@@ -16,6 +16,7 @@ namespace ChaosTest.WebService.Controllers
     /// <summary>
     /// Default controller.
     /// </summary>
+    [RoutePrefix("api")]
     public class DefaultController : ApiController
     {
         private const string ChaosTestServiceName = "ChaosTestService";
@@ -26,14 +27,9 @@ namespace ChaosTest.WebService.Controllers
         {
             this.clientFactory = clientFactory;
         }
-
-        [HttpGet]
-        public HttpResponseMessage Index()
-        {
-            return this.View("ChaosTest.WebService.Views.Default.Index.html", "text/html");
-        }
-
+        
         [HttpPost]
+        [Route("Start")]
         public Task Start()
         {
             Uri serviceUri = new ServiceUriBuilder(ChaosTestServiceName).ToUri();
@@ -45,12 +41,12 @@ namespace ChaosTest.WebService.Controllers
             return servicePartitionClient.InvokeWithRetryAsync(
                 client =>
                 {
-                    HttpClient httpClient = new HttpClient();
-                    return httpClient.PostAsync(client.BaseAddress + "/Start", new StringContent(String.Empty));
+                    return client.HttpClient.PostAsync(new Uri(client.Url, "Start"), new StringContent(String.Empty));
                 });
         }
 
         [HttpPost]
+        [Route("Stop")]
         public Task Stop()
         {
             Uri serviceUri = new ServiceUriBuilder(ChaosTestServiceName).ToUri();
@@ -62,12 +58,12 @@ namespace ChaosTest.WebService.Controllers
             return servicePartitionClient.InvokeWithRetryAsync(
                 client =>
                 {
-                    HttpClient httpClient = new HttpClient();
-                    return httpClient.PostAsync(client.BaseAddress + "/Stop", new StringContent(String.Empty));
+                    return client.HttpClient.PostAsync(new Uri(client.Url, "Stop"), new StringContent(String.Empty));
                 });
         }
 
         [HttpGet]
+        [Route("Results")]
         public Task<string> Results()
         {
             Uri serviceUri = new ServiceUriBuilder(ChaosTestServiceName).ToUri();
@@ -79,8 +75,7 @@ namespace ChaosTest.WebService.Controllers
             return servicePartitionClient.InvokeWithRetryAsync(
                 client =>
                 {
-                    HttpClient httpClient = new HttpClient();
-                    return httpClient.GetStringAsync(client.BaseAddress + "/Results");
+                    return client.HttpClient.GetStringAsync(new Uri(client.Url, "Results"));
                 });
         }
     }

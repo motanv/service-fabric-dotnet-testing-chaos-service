@@ -7,6 +7,9 @@ namespace ChaosTest.WebService
 {
     using System.Web.Http;
     using ChaosTest.Common;
+    using Microsoft.Owin;
+    using Microsoft.Owin.FileSystems;
+    using Microsoft.Owin.StaticFiles;
     using Owin;
 
     /// <summary>
@@ -23,11 +26,23 @@ namespace ChaosTest.WebService
         {
             HttpConfiguration config = new HttpConfiguration();
 
+            PhysicalFileSystem physicalFileSystem = new PhysicalFileSystem(@".\wwwroot");
+            FileServerOptions fileOptions = new FileServerOptions();
+
+            fileOptions.EnableDefaultFiles = true;
+            fileOptions.RequestPath = PathString.Empty;
+            fileOptions.FileSystem = physicalFileSystem;
+            fileOptions.DefaultFilesOptions.DefaultFileNames = new[] { "index.html" };
+            fileOptions.StaticFileOptions.FileSystem = fileOptions.FileSystem = physicalFileSystem;
+            fileOptions.StaticFileOptions.ServeUnknownFileTypes = true;
+
+            config.MapHttpAttributeRoutes();
+
             FormatterConfig.ConfigureFormatters(config.Formatters);
-            RouteConfig.RegisterRoutes(config.Routes);
             UnityConfig.RegisterComponents(config);
 
             appBuilder.UseWebApi(config);
+            appBuilder.UseFileServer(fileOptions);
         }
     }
 }

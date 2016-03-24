@@ -17,7 +17,7 @@ namespace ChaosTest.Common
     public class OwinCommunicationListener : ICommunicationListener
     {
         private readonly IOwinAppBuilder startup;
-        private readonly ServiceInitializationParameters serviceParameters;
+        private readonly ServiceContext serviceContext;
         private readonly string appRoot;
         private readonly CommonServiceEventSource eventSource;
 
@@ -25,11 +25,11 @@ namespace ChaosTest.Common
         private string listeningAddress;
 
         public OwinCommunicationListener(
-            string appRoot, IOwinAppBuilder startup, ServiceInitializationParameters serviceParameters, CommonServiceEventSource eventSource)
+            string appRoot, IOwinAppBuilder startup, ServiceContext serviceContext, CommonServiceEventSource eventSource)
         {
             this.startup = startup;
             this.appRoot = appRoot;
-            this.serviceParameters = serviceParameters;
+            this.serviceContext = serviceContext;
             this.eventSource = eventSource;
         }
 
@@ -38,22 +38,22 @@ namespace ChaosTest.Common
             // The name of the endpoint configured in the service manifest under the Endpoints
             // section; this is the endpoint that the OWIN server will be listening on.
             EndpointResourceDescription serviceEndpoint
-                = this.serviceParameters.CodePackageActivationContext.GetEndpoint(StringResource.ChaosServiceEndpoint);
+                = this.serviceContext.CodePackageActivationContext.GetEndpoint(StringResource.ChaosServiceEndpoint);
 
             int port = serviceEndpoint.Port;
 
-            StatefulServiceInitializationParameters statefulInitParams = this.serviceParameters as StatefulServiceInitializationParameters;
+            StatefulServiceContext statefulServiceContext = this.serviceContext as StatefulServiceContext;
 
-            if (statefulInitParams != null)
+            if (statefulServiceContext != null)
             {
                 // Address for a stateful service needs to be unique to the replica,
                 // because each node can host multiple replicas if the service has multiple partitions.
                 this.listeningAddress = string.Format(
                     CultureInfo.InvariantCulture,
-                    "http://+:{0}/{1}/{2}/{3}",
+                    "http://+:{0}/{1}/{2}/{3}/",
                     serviceEndpoint.Port,
-                    statefulInitParams.PartitionId,
-                    statefulInitParams.ReplicaId,
+                    statefulServiceContext.PartitionId,
+                    statefulServiceContext.ReplicaId,
                     Guid.NewGuid());
             }
             else
@@ -61,11 +61,11 @@ namespace ChaosTest.Common
                 // For a stateless service the listening address is just the app path.
                 this.listeningAddress = String.Format(
                     CultureInfo.InvariantCulture,
-                    "http://+:{0}/{1}",
+                    "http://+:{0}/{1}/",
                     port,
                     String.IsNullOrWhiteSpace(this.appRoot)
                         ? String.Empty
-                        : this.appRoot.TrimEnd('/') + '/');
+                        : this.appRoot.TrimEnd('/'));
             }
 
             this.serverHandle = WebApp.Start(this.listeningAddress, appBuilder => this.startup.Configuration(appBuilder));

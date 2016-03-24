@@ -41,7 +41,7 @@ namespace ChaosTest.WebService.Controllers
             return servicePartitionClient.InvokeWithRetryAsync(
                 client =>
                 {
-                    return client.HttpClient.PostAsync(new Uri(client.Url, "Start"), new StringContent(String.Empty));
+                    return client.HttpClient.PostAsync(new Uri(client.Url, "api/Start"), new StringContent(String.Empty));
                 });
         }
 
@@ -58,7 +58,7 @@ namespace ChaosTest.WebService.Controllers
             return servicePartitionClient.InvokeWithRetryAsync(
                 client =>
                 {
-                    return client.HttpClient.PostAsync(new Uri(client.Url, "Stop"), new StringContent(String.Empty));
+                    return client.HttpClient.PostAsync(new Uri(client.Url, "api/Stop"), new StringContent(String.Empty));
                 });
         }
 
@@ -75,7 +75,7 @@ namespace ChaosTest.WebService.Controllers
             return servicePartitionClient.InvokeWithRetryAsync(
                 client =>
                 {
-                    return client.HttpClient.GetStringAsync(new Uri(client.Url, "Results"));
+                    return client.HttpClient.GetStringAsync(new Uri(client.Url, "api/Results"));
                 });
         }
     }

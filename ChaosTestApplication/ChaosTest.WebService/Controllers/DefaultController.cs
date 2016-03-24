@@ -10,7 +10,6 @@ namespace ChaosTest.WebService.Controllers
     using System.Threading.Tasks;
     using System.Web.Http;
     using ChaosTest.Common;
-    using ChaosTest.WebService.Extensions;
     using Microsoft.ServiceFabric.Services.Communication.Client;
 
     /// <summary>
@@ -22,12 +21,11 @@ namespace ChaosTest.WebService.Controllers
         private const string ChaosTestServiceName = "ChaosTestService";
         private readonly ICommunicationClientFactory<HttpCommunicationClient> clientFactory;
 
-
         public DefaultController(ICommunicationClientFactory<HttpCommunicationClient> clientFactory)
         {
             this.clientFactory = clientFactory;
         }
-        
+
         [HttpPost]
         [Route("Start")]
         public Task Start()
@@ -39,10 +37,7 @@ namespace ChaosTest.WebService.Controllers
                 serviceUri);
 
             return servicePartitionClient.InvokeWithRetryAsync(
-                client =>
-                {
-                    return client.HttpClient.PostAsync(new Uri(client.Url, "api/Start"), new StringContent(String.Empty));
-                });
+                client => client.HttpClient.PostAsync(new Uri(client.Url, "api/Start"), new StringContent(String.Empty)));
         }
 
         [HttpPost]
@@ -56,10 +51,7 @@ namespace ChaosTest.WebService.Controllers
                 serviceUri);
 
             return servicePartitionClient.InvokeWithRetryAsync(
-                client =>
-                {
-                    return client.HttpClient.PostAsync(new Uri(client.Url, "api/Stop"), new StringContent(String.Empty));
-                });
+                client => client.HttpClient.PostAsync(new Uri(client.Url, "api/Stop"), new StringContent(String.Empty)));
         }
 
         [HttpGet]
@@ -73,10 +65,7 @@ namespace ChaosTest.WebService.Controllers
                 serviceUri);
 
             return servicePartitionClient.InvokeWithRetryAsync(
-                client =>
-                {
-                    return client.HttpClient.GetStringAsync(new Uri(client.Url, "api/Results"));
-                });
+                client =>  client.HttpClient.GetStringAsync(new Uri(client.Url, "api/Results")));
         }
     }
 }

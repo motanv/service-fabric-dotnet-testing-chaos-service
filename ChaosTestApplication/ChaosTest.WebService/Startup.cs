@@ -32,7 +32,7 @@ namespace ChaosTest.WebService
             fileOptions.EnableDefaultFiles = true;
             fileOptions.RequestPath = PathString.Empty;
             fileOptions.FileSystem = physicalFileSystem;
-            fileOptions.DefaultFilesOptions.DefaultFileNames = new[] { "index.html" };
+            fileOptions.DefaultFilesOptions.DefaultFileNames = new[] {"index.html"};
             fileOptions.StaticFileOptions.FileSystem = fileOptions.FileSystem = physicalFileSystem;
             fileOptions.StaticFileOptions.ServeUnknownFileTypes = true;
 

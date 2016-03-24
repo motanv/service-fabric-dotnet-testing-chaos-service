@@ -20,7 +20,6 @@ namespace ChaosTest.Common
         private readonly ServiceContext serviceContext;
         private readonly string appRoot;
         private readonly CommonServiceEventSource eventSource;
-
         private IDisposable serverHandle;
         private string listeningAddress;
 

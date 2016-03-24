@@ -9,7 +9,6 @@ namespace ChaosTest.ChaosService
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Fabric;
-    using System.Fabric.Testability;
     using System.Fabric.Testability.Scenario;
     using System.Globalization;
     using System.Threading;
@@ -19,7 +18,6 @@ namespace ChaosTest.ChaosService
     using Microsoft.ServiceFabric.Data.Collections;
     using Microsoft.ServiceFabric.Services.Communication.Runtime;
     using Microsoft.ServiceFabric.Services.Runtime;
-    using Constants = ChaosTest.Common.Constants;
 
     /// <summary>
     /// This stateful service keeps inducing failovers and faults - chosen probabilistically - to the cluster,
@@ -31,7 +29,7 @@ namespace ChaosTest.ChaosService
         private CancellationTokenSource stopEventTokenSource;
 
         public ChaosService(StatefulServiceContext context)
-            : base (context)
+            : base(context)
         {
         }
 
@@ -120,10 +118,7 @@ namespace ChaosTest.ChaosService
             {
                 IAsyncEnumerable<KeyValuePair<long, ChaosEntry>> enumerable = await savedEvents.CreateEnumerableAsync(tx);
 
-                await enumerable.ForeachAsync(CancellationToken.None, item =>
-                {
-                    results.ChaosLog.Add(item.Key, item.Value);
-                });
+                await enumerable.ForeachAsync(CancellationToken.None, item => { results.ChaosLog.Add(item.Key, item.Value); });
 
                 ConditionalValue<DateTime> result = await startTime.TryGetValueAsync(tx, StringResource.StartTimeKey);
 

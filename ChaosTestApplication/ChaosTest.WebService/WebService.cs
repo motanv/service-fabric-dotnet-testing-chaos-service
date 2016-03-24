@@ -17,8 +17,9 @@ namespace ChaosTest.WebService
     public class WebService : StatelessService
     {
         public WebService(StatelessServiceContext context)
-            : base (context)
-        { }
+            : base(context)
+        {
+        }
 
         protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
         {

@@ -8,13 +8,19 @@ namespace ChaosTest.ChaosService
     using System;
     using System.Diagnostics;
     using System.Fabric;
+    using System.IO;
+    using System.Reflection;
     using System.Threading;
     using ChaosTest.Common;
 
     public class Program
     {
+        private const string FabricCodePath = @"C:\Program Files\Microsoft Service Fabric\bin\Fabric\Fabric.Code";
+        
         public static void Main(string[] args)
         {
+            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(LoadFromFabricCodePath);
+            
             try
             {
                 using (FabricRuntime fabricRuntime = FabricRuntime.Create())
@@ -37,6 +43,26 @@ namespace ChaosTest.ChaosService
                 ServiceEventSource.Current.ServiceHostInitializationFailed(e);
                 throw;
             }
+        }
+        
+        private static Assembly LoadFromFabricCodePath(object sender, ResolveEventArgs args)
+        {
+            try
+            {
+                string folderPath = FabricCodePath;
+                string assemblyPath = Path.Combine(folderPath, new AssemblyName(args.Name).Name + ".dll");
+                if (File.Exists(assemblyPath))
+                {
+                    return Assembly.LoadFrom(assemblyPath);
+                }
+            }
+            catch (Exception)
+            {
+                // Supress any Exception so that we can continue to
+                // load the assembly through other means
+            }
+
+            return null;
         }
     }
 }

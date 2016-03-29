@@ -32,8 +32,9 @@ namespace ChaosTest.ChaosService
             HttpConfiguration config = new HttpConfiguration();
 
             FormatterConfig.ConfigureFormatters(config.Formatters);
-            RouteConfig.RegisterRoutes(config.Routes);
             UnityConfig.RegisterComponents(config, this.service);
+
+            config.MapHttpAttributeRoutes();
 
             appBuilder.UseWebApi(config);
         }

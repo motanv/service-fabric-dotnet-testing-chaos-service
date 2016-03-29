@@ -1,0 +1,323 @@
+﻿<html>
+<head>
+    <title>Chaos Test Service</title>
+    <script type="text/javascript" src="Scripts/jquery-1.11.2.min.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #525252;
+            width: 100%;
+            font-family: 'Microsoft YaHei', wf_segoe-ui_normal, "Segoe UI", "Segoe WP", Tahoma, Arial, sans-serif;
+        }
+
+        #content {
+            width: 1550px;
+            margin: 0 auto;
+        }
+
+        #top {
+            background-color: #00abec;
+            background-image: url("img/bg-top.jpg");
+            height: 408px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        h1 {
+            display: block;
+            color: #ffffff;
+            font-weight: 200;
+            font-size: 40px;
+            padding: 0;
+            margin: 0;
+        }
+
+        h2 {
+            color: #ffffff;
+            font-weight: 100;
+            font-size: 18px;
+            display: block;
+            padding: 0;
+            margin-top: 10px;
+        }
+
+        #text {
+            float: right;
+            margin: 90px 250px 0 0;
+        }
+
+        #status-bar {
+            background-color: #89c402;
+            height: 28px;
+            padding-top: 6px;
+            text-align: center;
+        }
+
+        #totalTime {
+            color: #ffffff;
+            width: 360px;
+            padding: 0;
+        }
+
+        #startButton, #stopButton {
+            font-family: 'Microsoft YaHei', wf_segoe-ui_normal, "Segoe UI", "Segoe WP", Tahoma, Arial, sans-serif;
+            font-weight: 100;
+            font-size: 21px;
+            color: #ffffff;
+            width: 177px;
+            height: 47px;
+            background-color: #89c402;
+            border: 0;
+            box-shadow: 0;
+            margin-top: 50px;
+            margin-right: 10px;
+        }
+
+            #startButton:hover, #stopButton:hover {
+                font-family: 'Microsoft YaHei', wf_segoe-ui_normal, "Segoe UI", "Segoe WP", Tahoma, Arial, sans-serif;
+                font-weight: 100;
+                font-size: 21px;
+                color: #ffffff;
+                width: 177px;
+                height: 47px;
+                background-color: #A2DA21;
+                border: 0;
+                box-shadow: 0;
+                margin-top: 50px;
+                margin-right: 10px;
+            }
+
+        #mid {
+            background-color: #f5f5f5;
+            margin: 0;
+            height: auto;
+            min-height: 700px;
+        }
+
+        #log {
+            margin: 0;
+            list-style-type: none;
+            height: auto;
+            min-height: 700px;
+            color: #545454;
+            padding: 10px 0 50px 90px;
+        }
+
+        li {
+            width: 1350px;
+            clear: both;
+        }
+
+            li span {
+                float: left;
+            }
+
+        #bottom {
+            background-color: #00abec;
+            background-image: url("img/bg-bottom.jpg");
+            height: 408px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .number {
+            width: 50px;
+            border-right: 1px #525252 dotted;
+            margin: 0;
+            padding: 0;
+        }
+
+        .timeStamp {
+            width: 220px;
+            margin-left: 30px;
+        }
+
+        .info {
+            margin: 0 0 0 320px;
+            padding: 0 0 35px 40px;
+            font-family: 'Microsoft YaHei', wf_segoe-ui_normal, "Segoe UI", "Segoe WP", Tahoma, Arial, sans-serif;
+            font-weight: 400;
+            border-left: 3px #f26c4f solid;
+            color: #5E5E5E;
+        }
+
+        #tab {
+            width: 1900px;
+            margin-bottom: 20px;
+            padding: 50px 0 0px 90px;
+            font-family: "courier";
+            color: rgb(166, 166, 166);
+        }
+
+        #tab-time {
+            margin-left: 60px;
+        }
+
+        #tab-content {
+            margin-left: 580px;
+        }
+
+        .wa-svg-cloud {
+            overflow: hidden;
+            fill: rgb(0, 171, 236);
+            display: block;
+            position: absolute;
+            z-index: 0;
+            width: 500px;
+            height: 400px;
+        }
+
+        .wa-svg-cloud-1 {
+            left: -220px;
+            top: -200px;
+            width: 600px;
+            height: 480px;
+            -moz-transform: rotate(180deg);
+            -ms-transform: rotate(180deg);
+            -o-transform: rotate(180deg);
+            -webkit-transform: rotate(180deg);
+            transform: rotate(180deg);
+        }
+
+        .wa-svg-cloud-2 {
+            left: 1200px;
+            top: -230px;
+            width: 500px;
+            height: 480px;
+            -moz-transform: rotate(180deg);
+            -ms-transform: rotate(180deg);
+            -o-transform: rotate(180deg);
+            -webkit-transform: rotate(180deg);
+            transform: rotate(180deg);
+        }
+
+        .wa-svg-cloud-3 {
+            top: 20px;
+            right: 990px;
+            width: 560px;
+            height: 688px;
+        }
+
+        .wa-svg-cloud-4 {
+            left: -20px;
+            top: -200px;
+            width: 600px;
+            height: 480px;
+            -moz-transform: rotate(180deg);
+            -ms-transform: rotate(180deg);
+            -o-transform: rotate(180deg);
+            -webkit-transform: rotate(180deg);
+            transform: rotate(180deg);
+        }
+
+        .wa-svg-cloud-5 {
+            left: 900px;
+            top: -100px;
+            width: 500px;
+            height: 480px;
+        }
+
+        .wa-svg-cloud-6 {
+            top: -80px;
+            right: 690px;
+            width: 560px;
+            height: 688px;
+        }
+
+        svg:not(:root) {
+            overflow: hidden;
+        }
+    </style>
+
+</head>
+<body>
+    <div id="content">
+        <div id="top">
+            <div id="text">
+                <svg class="wa-svg-cloud wa-svg-cloud-1" x="0px" y="0px" viewBox="-4 0 40 32" xml:space="preserve"><filter id="drop-shadow"><feGaussianBlur in="SourceAlpha" stdDeviation="1"></feGaussianBlur><feOffset dx="0" dy="0"></feOffset><feComponentTransfer xmlns="http://www.w3.org/2000/svg"><feFuncA type="linear" slope=".2"></feFuncA></feComponentTransfer><feMerge><feMergeNode></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge></filter><path filter="url(#drop-shadow)" d="M20.7,14.8c0.8-0.7,2-1.2,3.1-1.2c1.9,0,3.6,1.3,4.2,3c0.3-0.1,0.6-0.2,1-0.2c1.7,0,3,1.3,3,3 c0,1.7-1.3,3-3,3c0,0,0,0,0,0l0,0H2.1c-1.2,0-2.1-1-2.1-2.1c0-1.2,1-2.1,2.1-2.1c0,0,0,0,0.1,0C2.1,17.8,2,17.4,2,17 c0-2.4,2-4.4,4.4-4.4c1.1,0,2.2,0.4,3,1.2c0.7-2.5,2.9-4.3,5.6-4.3C18,9.5,20.5,11.8,20.7,14.8z"></path></svg>
+                <svg class="wa-svg-cloud wa-svg-cloud-2" x="0px" y="0px" viewBox="-4 0 40 32" xml:space="preserve"><filter id="drop-shadow"><feGaussianBlur in="SourceAlpha" stdDeviation="1"></feGaussianBlur><feOffset dx="0" dy="0"></feOffset><feComponentTransfer xmlns="http://www.w3.org/2000/svg"><feFuncA type="linear" slope=".2"></feFuncA></feComponentTransfer><feMerge><feMergeNode></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge></filter><path filter="url(#drop-shadow)" d="M20.7,14.8c0.8-0.7,2-1.2,3.1-1.2c1.9,0,3.6,1.3,4.2,3c0.3-0.1,0.6-0.2,1-0.2c1.7,0,3,1.3,3,3 c0,1.7-1.3,3-3,3c0,0,0,0,0,0l0,0H2.1c-1.2,0-2.1-1-2.1-2.1c0-1.2,1-2.1,2.1-2.1c0,0,0,0,0.1,0C2.1,17.8,2,17.4,2,17 c0-2.4,2-4.4,4.4-4.4c1.1,0,2.2,0.4,3,1.2c0.7-2.5,2.9-4.3,5.6-4.3C18,9.5,20.5,11.8,20.7,14.8z"></path></svg>
+                <svg class="wa-svg-cloud wa-svg-cloud-3" x="0px" y="0px" viewBox="-4 0 40 32" xml:space="preserve"><filter id="drop-shadow"><feGaussianBlur in="SourceAlpha" stdDeviation="1"></feGaussianBlur><feOffset dx="0" dy="0"></feOffset><feComponentTransfer xmlns="http://www.w3.org/2000/svg"><feFuncA type="linear" slope=".2"></feFuncA></feComponentTransfer><feMerge><feMergeNode></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge></filter><path filter="url(#drop-shadow)" d="M20.7,14.8c0.8-0.7,2-1.2,3.1-1.2c1.9,0,3.6,1.3,4.2,3c0.3-0.1,0.6-0.2,1-0.2c1.7,0,3,1.3,3,3 c0,1.7-1.3,3-3,3c0,0,0,0,0,0l0,0H2.1c-1.2,0-2.1-1-2.1-2.1c0-1.2,1-2.1,2.1-2.1c0,0,0,0,0.1,0C2.1,17.8,2,17.4,2,17 c0-2.4,2-4.4,4.4-4.4c1.1,0,2.2,0.4,3,1.2c0.7-2.5,2.9-4.3,5.6-4.3C18,9.5,20.5,11.8,20.7,14.8z"></path></svg>
+                <h1>Chaos Test Service</h1>
+                <h2>A Service Fabric Fault Injection Service</h2>
+                <button id="startButton" type="button">Start Faults</button>
+                <button id="stopButton" type="button">Stop Faults</button>
+            </div>
+        </div>
+        <div id="status-bar">
+            <span id="totalTime"></span>
+        </div>
+        <div id="mid">
+            <div id="tab">
+                <span id="tab-entry">Entry</span>
+                <span id="tab-time">Time Stamp</span>
+                <span id="tab-content">Content</span>
+            </div>
+            <ul id="log"></ul>
+        </div>
+        <div id="bottom">
+            <svg class="wa-svg-cloud wa-svg-cloud-4" x="0px" y="0px" viewBox="-4 0 40 32" xml:space="preserve"><filter id="drop-shadow"><feGaussianBlur in="SourceAlpha" stdDeviation="1"></feGaussianBlur><feOffset dx="0" dy="0"></feOffset><feComponentTransfer xmlns="http://www.w3.org/2000/svg"><feFuncA type="linear" slope=".2"></feFuncA></feComponentTransfer><feMerge><feMergeNode></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge></filter><path filter="url(#drop-shadow)" d="M20.7,14.8c0.8-0.7,2-1.2,3.1-1.2c1.9,0,3.6,1.3,4.2,3c0.3-0.1,0.6-0.2,1-0.2c1.7,0,3,1.3,3,3 c0,1.7-1.3,3-3,3c0,0,0,0,0,0l0,0H2.1c-1.2,0-2.1-1-2.1-2.1c0-1.2,1-2.1,2.1-2.1c0,0,0,0,0.1,0C2.1,17.8,2,17.4,2,17 c0-2.4,2-4.4,4.4-4.4c1.1,0,2.2,0.4,3,1.2c0.7-2.5,2.9-4.3,5.6-4.3C18,9.5,20.5,11.8,20.7,14.8z"></path></svg>
+            <svg class="wa-svg-cloud wa-svg-cloud-5" x="0px" y="0px" viewBox="-4 0 40 32" xml:space="preserve"><filter id="drop-shadow"><feGaussianBlur in="SourceAlpha" stdDeviation="1"></feGaussianBlur><feOffset dx="0" dy="0"></feOffset><feComponentTransfer xmlns="http://www.w3.org/2000/svg"><feFuncA type="linear" slope=".2"></feFuncA></feComponentTransfer><feMerge><feMergeNode></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge></filter><path filter="url(#drop-shadow)" d="M20.7,14.8c0.8-0.7,2-1.2,3.1-1.2c1.9,0,3.6,1.3,4.2,3c0.3-0.1,0.6-0.2,1-0.2c1.7,0,3,1.3,3,3 c0,1.7-1.3,3-3,3c0,0,0,0,0,0l0,0H2.1c-1.2,0-2.1-1-2.1-2.1c0-1.2,1-2.1,2.1-2.1c0,0,0,0,0.1,0C2.1,17.8,2,17.4,2,17 c0-2.4,2-4.4,4.4-4.4c1.1,0,2.2,0.4,3,1.2c0.7-2.5,2.9-4.3,5.6-4.3C18,9.5,20.5,11.8,20.7,14.8z"></path></svg>
+            <svg class="wa-svg-cloud wa-svg-cloud-6" x="0px" y="0px" viewBox="-4 0 40 32" xml:space="preserve"><filter id="drop-shadow"><feGaussianBlur in="SourceAlpha" stdDeviation="1"></feGaussianBlur><feOffset dx="0" dy="0"></feOffset><feComponentTransfer xmlns="http://www.w3.org/2000/svg"><feFuncA type="linear" slope=".2"></feFuncA></feComponentTransfer><feMerge><feMergeNode></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge></filter><path filter="url(#drop-shadow)" d="M20.7,14.8c0.8-0.7,2-1.2,3.1-1.2c1.9,0,3.6,1.3,4.2,3c0.3-0.1,0.6-0.2,1-0.2c1.7,0,3,1.3,3,3 c0,1.7-1.3,3-3,3c0,0,0,0,0,0l0,0H2.1c-1.2,0-2.1-1-2.1-2.1c0-1.2,1-2.1,2.1-2.1c0,0,0,0,0.1,0C2.1,17.8,2,17.4,2,17 c0-2.4,2-4.4,4.4-4.4c1.1,0,2.2,0.4,3,1.2c0.7-2.5,2.9-4.3,5.6-4.3C18,9.5,20.5,11.8,20.7,14.8z"></path></svg>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var serviceUrl = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/ChaosTest';
+        $(function () {
+
+            $('#startButton').click(function () {
+                $.ajax({
+                    url: serviceUrl + '/api/start',
+                    dataType: 'text',
+                    method: 'POST'
+                })
+                .done(function (result) {
+
+                });
+            });
+
+
+            $('#stopButton').click(function () {
+                $.ajax({
+                    url: serviceUrl + '/api/stop',
+                    dataType: 'text',
+                    method: 'POST'
+                })
+                .done(function (result) {
+
+                });
+            });
+
+
+            var ResultsTask = setInterval(function () { RefreshResults(); }, 1000);
+
+            function RefreshResults() {
+                $.ajax({
+                    url: serviceUrl + '/api/results',
+                    dataType: 'text',
+                    method: 'GET',
+                    cache: false
+                })
+                .done(function (result) {
+                    var resultText = JSON.parse(result);
+                    var resultObj = JSON.parse(resultText);
+                    if (resultObj.CurrentState === "Running") {
+                        $('#totalTime').text("Chaos Total Running time: " + resultObj.TotalRuntime);
+                        $('#status-bar').css('background-color', '#89c402');
+                    }
+                    else
+                    {
+                        $('#totalTime').text("Stopped");
+                        $('#status-bar').css('background-color', '#F26C4F');
+                    }
+
+                    $('#log').html("");
+                    $.each(resultObj.ChaosLog, function (key, value) {
+                        $('#log').prepend('<li><span class="number">' + key + "</span>" + '<span class="timeStamp">' + value.TimeStamp + '</span>' + '<p class="info">' + value.Record.split("\n\t\t").join("<b><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;") + "</b></p>" + "</li>");
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -307,7 +307,7 @@ namespace ChaosTest.ChaosService
                 return;
             }
 
-            this.StoreEventAsync(eventString).Wait();
+            this.StoreEventAsync(eventString).GetAwaiter().GetResult();
         }
 
         /// <summary>

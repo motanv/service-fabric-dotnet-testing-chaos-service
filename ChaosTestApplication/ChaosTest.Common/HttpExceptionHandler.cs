@@ -35,7 +35,7 @@ namespace ChaosTest.Common
 
             if (httpException != null)
             {
-                result = new ExceptionHandlingThrowResult();
+                result = new ExceptionHandlingRetryResult(exceptionInformation.Exception, false, retrySettings, retrySettings.DefaultMaxRetryCount);
                 return true;
             }
 

@@ -10,6 +10,7 @@
       <Parameter Name="WaitTimeBetweenIterations" DefaultValue="0.00:00:05" />
       <Parameter Name="PlacementConstraints" DefaultValue="" />
       <Parameter Name="ChaosServiceName" DefaultValue="ChaosTestService" />
+      <Parameter Name="ChaosTestWebService_InstanceCount" DefaultValue="1" />
    </Parameters>
    <ServiceManifestImport>
       <ServiceManifestRef ServiceManifestName="ChaosTestService" ServiceManifestVersion="1.0.0.0" />
@@ -47,7 +48,7 @@
          </StatefulService>
       </Service>
       <Service Name="ChaosTestWebService">
-         <StatelessService ServiceTypeName="ChaosTestWebServiceType">
+         <StatelessService ServiceTypeName="ChaosTestWebServiceType" InstanceCount="[ChaosTestWebService_InstanceCount]">
             <SingletonPartition />
             <PlacementConstraints>[PlacementConstraints]</PlacementConstraints>
          </StatelessService>

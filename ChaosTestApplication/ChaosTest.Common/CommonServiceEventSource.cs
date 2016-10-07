@@ -10,8 +10,35 @@ namespace ChaosTest.Common
     using System.Fabric;
     using Microsoft.ServiceFabric.Services.Runtime;
 
-    public abstract class CommonServiceEventSource : EventSource
+    public sealed class CommonServiceEventSource : EventSource
     {
+        private static volatile CommonServiceEventSource instance;
+
+        private static object syncRoot = new object();
+
+        private CommonServiceEventSource()
+        {
+        }
+
+        public static CommonServiceEventSource Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    lock (syncRoot)
+                    {
+                        if (instance == null)
+                        {
+                            instance = new CommonServiceEventSource();
+                        }
+                    }
+                }
+
+                return instance;
+            }
+        }
+
         [NonEvent]
         public void Message(string message, params object[] args)
         {

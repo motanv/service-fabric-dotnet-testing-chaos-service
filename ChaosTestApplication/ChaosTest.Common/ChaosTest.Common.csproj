@@ -86,7 +86,6 @@
     <Compile Include="HttpCommunicationClient.cs" />
     <Compile Include="HttpCommunicationClientFactory.cs" />
     <Compile Include="ConfigurationSetting.cs" />
-    <Compile Include="ConfigurationSettingEventSource.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="HttpExceptionHandler.cs" />
     <Compile Include="IAsyncEnumerableExtensions.cs" />

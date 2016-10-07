@@ -9,8 +9,8 @@ namespace ChaosTest.ChaosService
     using ChaosTest.Common;
 
     [EventSource(Name = "MyCompany-ServiceApplication-ChaosTestAppChaosService")]
-    internal sealed class ServiceEventSource : CommonServiceEventSource
+    internal sealed class ServiceEventSource
     {
-        public static ServiceEventSource Current = new ServiceEventSource();
+        public static CommonServiceEventSource Current = CommonServiceEventSource.Instance;
     }
 }

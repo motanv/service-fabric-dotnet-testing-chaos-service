@@ -7,17 +7,12 @@ namespace ChaosTest.ChaosService
 {
     using System;
     using System.Diagnostics;
-    using System.IO;
-    using System.Reflection;
     using System.Threading;
     using ChaosTest.Common;
     using Microsoft.ServiceFabric.Services.Runtime;
 
     public class Program
     {
-        private const string FabricCodePath = @"C:\Program Files\Microsoft Service Fabric\bin\Fabric\Fabric.Code";
-        private const string ServiceModelAssemblyName = "System.Fabric.Management.ServiceModel";
-
         public static void Main(string[] args)
         {
             try
@@ -26,8 +21,6 @@ namespace ChaosTest.ChaosService
                     StringResource.ChaosTestServiceType,
                     context =>
                         new ChaosService(context)).GetAwaiter().GetResult();
-
-                AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(LoadFromFabricCodePath);
 
                 ServiceEventSource.Current.ServiceTypeRegistered(Process.GetCurrentProcess().Id, typeof(ChaosService).Name);
 
@@ -42,32 +35,5 @@ namespace ChaosTest.ChaosService
                 throw;
             }
         }
-
-        private static Assembly LoadFromFabricCodePath(object sender, ResolveEventArgs args)
-        {
-            string assemblyName = new AssemblyName(args.Name).Name;
-
-            if (!assemblyName.Equals(ServiceModelAssemblyName))
-            {
-                return null;
-            }
-
-            try
-            {
-                string assemblyPath = Path.Combine(FabricCodePath, assemblyName + ".dll");
-                if (File.Exists(assemblyPath))
-                {
-                    return Assembly.LoadFrom(assemblyPath);
-                }
-            }
-            catch (Exception)
-            {
-                // Suppress any Exception so that we can continue to
-                // load the assembly through other means
-            }
-
-            return null;
-        }
-
     }
 }
